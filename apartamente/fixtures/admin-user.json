@@ -1,0 +1,14 @@
+[
+  {
+    "model": "auth.User",
+    "fields": {
+      "first_name": "Goia",
+      "last_name": "Ciprian",
+      "email": "goia.ciprian14@gmail.com",
+      "username": "goia.ciprian",
+      "is_superuser": 1,
+      "is_staff": 1,
+      "password": "pbkdf2_sha256$120000$RXjStJdSEgL7$Fky9q0FG/+0LJq4jye7KD4g95Yt/4A0K+w0G0DxVeKs="
+    }
+  }
+]
