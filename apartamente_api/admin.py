@@ -22,7 +22,7 @@ class TipApartamentAdmin(admin.ModelAdmin):
 @admin.register(Apartament)
 class ApartamentAdmin(admin.ModelAdmin):
     list_display = ('denumire', 'get_tip', 'get_locuitori_number',
-                    'get_aplicanti_number', 'get_chirie')
+                    'get_aplicanti_number', 'get_chirie', 'get_metri_patrati')
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)

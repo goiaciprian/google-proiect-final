@@ -18,13 +18,13 @@ class TipApartamentSerializer(serializers.ModelSerializer):
 class ApartamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Apartament
-        fields = ['id', 'denumire', 'adresa', 'tip']
+        fields = ['id', 'denumire', 'adresa', 'tip', 'chirie', 'metri_patrati']
 
 
 class AplicantiApartamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AplicantiApartament
-        fields = '__all__'
+        fields = ['id', 'apartament', 'aplicant', 'status']
 
 
 class LocuitoriApartamentSerializer(serializers.ModelSerializer):

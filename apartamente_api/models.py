@@ -45,6 +45,9 @@ class Apartament(ModelBase):
     owner = models.ForeignKey(
         AUTH_USER_MODEL, on_delete=models.CASCADE, null=False)
 
+    metri_patrati = models.DecimalField(
+        max_digits=10, decimal_places=2)
+
     aplicanti = models.ManyToManyField(
         AUTH_USER_MODEL, through="AplicantiApartament", related_name='aplicanti')
 
@@ -53,6 +56,10 @@ class Apartament(ModelBase):
 
     def __str__(self):
         return self.denumire
+
+    def get_metri_patrati(self):
+        return self.metri_patrati
+    get_metri_patrati.short_description = 'Metri patrati'
 
     def get_tip(self):
         return self.tip.denumire
