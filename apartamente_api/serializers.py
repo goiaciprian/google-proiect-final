@@ -16,6 +16,10 @@ class TipApartamentSerializer(serializers.ModelSerializer):
 
 
 class ApartamentSerializer(serializers.ModelSerializer):
+
+    chirie = serializers.DecimalField(max_digits=10, decimal_places=2)
+    metri_patrati = serializers.DecimalField(max_digits=10, decimal_places=2)
+
     class Meta:
         model = Apartament
         fields = ['id', 'denumire', 'adresa', 'tip', 'chirie', 'metri_patrati']

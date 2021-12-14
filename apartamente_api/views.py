@@ -45,8 +45,8 @@ def get_tip_apartament_by_id(request, id):
         raise Http404
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def merge_tip_apartament(request):
     created = False
     nameExists = False
@@ -75,10 +75,9 @@ def merge_tip_apartament(request):
     return Response(TipApartamentSerializer(tip_apartament, many=False).data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def delete_tip_apartament(request, id):
-    print(request.user)
     try:
         tip_apartament = TipApartament.objects.get(id=id)
         tip_apartament.deleted = True
@@ -89,15 +88,25 @@ def delete_tip_apartament(request, id):
         raise Http404
 
 
-@permission_classes([AllowAny])
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_apartamente_list(request):
-    apartamente = Apartament.objects.filter(deleted=False)
+    elementePePagina = request.GET.get('elemente', 10)
+    pagina = request.GET.get('pagina', 1)
+
+    print(elementePePagina)
+    print(pagina)
+
+    indexFinal = int(elementePePagina) * int(pagina)
+    indexStart = indexFinal - int(elementePePagina)
+
+    apartamente = list(Apartament.objects.filter(deleted=False))[
+        indexStart:indexFinal]
     return Response(ApartamentSerializer(apartamente, many=True).data, status=status.HTTP_200_OK)
 
 
-@permission_classes([AllowAny])
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_apartament_by_id(request, id):
     try:
         return Response(ApartamentSerializer(Apartament.objects.filter(deleted=False).get(id=id), many=False).data)
@@ -105,8 +114,8 @@ def get_apartament_by_id(request, id):
         raise Http404
 
 
-@permission_classes([AllowAny])
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_apartamente_by_owner_id(request, id):
     try:
         return Response(ApartamentSerializer(Apartament.objects.filter(deleted=False).filter(owner=id), many=True).data)
@@ -114,8 +123,8 @@ def get_apartamente_by_owner_id(request, id):
         raise Http404
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def merge_apartament(request):
     created = False
     nameExists = False
@@ -150,8 +159,8 @@ def merge_apartament(request):
     return Response(ApartamentSerializer(apartament, many=False).data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def delete_apartament(request, id):
     try:
         apartament = Apartament.objects.get(id=id)
@@ -163,8 +172,8 @@ def delete_apartament(request, id):
         raise Http404
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_apartament_aplicari(request, apartament_id):
     try:
         aplicatie = AplicantiApartament.objects.filter(
@@ -175,8 +184,8 @@ def get_apartament_aplicari(request, apartament_id):
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def adauga_aplicare_apartament(request):
     try:
 
@@ -199,8 +208,8 @@ def adauga_aplicare_apartament(request):
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@ permission_classes([IsAuthenticated])
 @ api_view(['POST'])
+@ permission_classes([IsAuthenticated])
 def accept_deny_aplicatie(request, id, sts):
     try:
         aplicatie = AplicantiApartament.objects.filter(
@@ -219,8 +228,8 @@ def accept_deny_aplicatie(request, id, sts):
         raise Http404
 
 
-@permission_classes([IsAuthenticated])
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_locuitori_apartament(request, apartament_id):
     try:
         locuitori = LocuitoriApartament.objects.filter(
