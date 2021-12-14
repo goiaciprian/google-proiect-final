@@ -1,28 +1,17 @@
 import React from "react";
 
-export type State = {
-  value: any;
-  error: boolean;
-  helperMessage: string;
-};
-
-type Action = {
-  type: string;
-  payload: any;
-};
-
 const initialState = {
   value: "",
   error: false,
   helperMessage: "",
 };
 
-enum Types {
-  Set_Value = "SET_VALUE",
-  Set_Error = "SET_ERROR",
-}
+const Types = {
+  Set_Value: "SET_VALUE",
+  Set_Error: "SET_ERROR",
+};
 
-const reducer = (state: State, action: Action) => {
+const reducer = (state, action) => {
   switch (action.type) {
     case Types.Set_Value:
       return { ...state, value: action.payload };
@@ -37,7 +26,7 @@ const reducer = (state: State, action: Action) => {
   }
 };
 
-export default function useField(defauldValue: any = "") {
+export default function useField(defauldValue = "") {
   const [value, setValue] = React.useReducer(
     reducer,
     initialState,
@@ -48,7 +37,7 @@ export default function useField(defauldValue: any = "") {
     setValue({ type: Types.Set_Value, payload: defauldValue });
   }, [defauldValue]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e) => {
     setValue({ type: Types.Set_Value, payload: e.target.value });
   };
   const onBlur = () => {

@@ -1,7 +1,6 @@
-
-export const saveTokenToLocalStorage = (value: string) => {
+export const saveTokenToLocalStorage = (value) => {
   localStorage.setItem("token", value);
-}
+};
 
 export const checkOrReturnToken = async () => {
   const token = localStorage.getItem("token");
@@ -9,4 +8,4 @@ export const checkOrReturnToken = async () => {
     return token;
   }
   return null;
-}
+};

@@ -94,9 +94,6 @@ def get_apartamente_list(request):
     elementePePagina = request.GET.get('elemente', 10)
     pagina = request.GET.get('pagina', 1)
 
-    print(elementePePagina)
-    print(pagina)
-
     indexFinal = int(elementePePagina) * int(pagina)
     indexStart = indexFinal - int(elementePePagina)
 

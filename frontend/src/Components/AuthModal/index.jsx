@@ -1,26 +1,26 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import React from "react";
-import withModalState, {
-  initial_state_modal,
-  ModalState,
-  ModalTypes,
-  useModalDispatch,
-  useModalState,
-} from "../../Contexts/modalState";
+import { Types, useGlobalStateDispatch, useGlobalState } from "../../Contexts";
 import { FlexDiv } from "../../Styles";
 import Form from "../Form";
 
 const AuthModal = () => {
-  const modalState = useModalState();
-  const _modal_dispatch = useModalDispatch();
+  const globalState = useGlobalState();
+  const _dispatch = useGlobalStateDispatch();
 
-  const handleClose = () => _modal_dispatch({ type: ModalTypes.Close_Modal });
+  const handleClose = () => _dispatch({ type: Types.Close_Modal });
 
   return (
-    <Dialog open={modalState.open} onClose={handleClose}>
+    <Dialog open={globalState.modalState.open} onClose={handleClose}>
+      <DialogTitle sx={{ marginLeft: "auto" }}>
+        <IconButton onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
-        {modalState.type === "login" ? (
-          <FlexDiv>
+        {globalState.modalState.type === "login" ? (
+          <FlexDiv margin="2em 6em">
             <Form
               formTitle="Login"
               fields={[
@@ -39,7 +39,7 @@ const AuthModal = () => {
             />
           </FlexDiv>
         ) : (
-          <FlexDiv>
+          <FlexDiv margin="2em 6em">
             <Form
               formTitle="Register"
               fields={[
@@ -78,4 +78,4 @@ const AuthModal = () => {
   );
 };
 
-export default withModalState(AuthModal);
+export default AuthModal;

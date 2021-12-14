@@ -1,25 +1,10 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
 import { FlexDiv } from "../../Styles";
-import InputField, {
-  InputFieldProps,
-  InputForwardRefProps,
-} from "../InputField";
+import InputField from "../InputField";
 
-export interface FormProps {
-  fields: InputFieldProps[];
-  formTitle?: string;
-  submitCallback: (data: any) => any;
-}
-
-const Form: React.FC<FormProps> = ({
-  fields,
-  formTitle = null,
-  submitCallback,
-}) => {
-  const fieldsRef = React.useRef(
-    fields.map(() => React.createRef<InputForwardRefProps>())
-  );
+const Form = ({ fields, formTitle = null, submitCallback }) => {
+  const fieldsRef = React.useRef(fields.map(() => React.createRef()));
   const [err, setErr] = React.useState(false);
 
   const hasAnyErros = () => {
@@ -28,9 +13,19 @@ const Form: React.FC<FormProps> = ({
     return err;
   };
 
-  const submitWrapper = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const makeData = () => {
+    const data = {};
+    fieldsRef.current?.forEach((ref) => {
+      const refData = ref.current?.getValue();
+      data[refData.name] = refData.value;
+    });
+    return data;
+  };
+
+  const submitWrapper = (e) => {
     e.preventDefault();
     if (hasAnyErros()) return;
+    submitCallback(makeData());
   };
 
   return (
