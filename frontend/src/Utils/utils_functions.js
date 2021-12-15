@@ -9,3 +9,14 @@ export const checkOrReturnToken = async () => {
   }
   return null;
 };
+
+export const checkRegisterForm = (data) => {
+  let error = data["password"] !== data["confirm_password"];
+  Object.keys(data).forEach((key) => {
+    if (data[key] === "") {
+      error = true;
+    }
+  });
+
+  return error;
+};

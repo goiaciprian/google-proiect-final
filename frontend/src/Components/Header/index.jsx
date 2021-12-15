@@ -1,61 +1,119 @@
 import {
-  BottomNavigation,
-  BottomNavigationAction,
   Typography,
+  AppBar,
+  Toolbar,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemText,
 } from "@mui/material";
 import React from "react";
-import { globalDispatchContext, Types } from "../../Contexts";
-import { FlexDiv, mainColor, whiteColor } from "../../Styles";
+import { globalDispatchContext, Types, useGlobalState } from "../../Contexts";
+import { FlexDiv, whiteColor } from "../../Styles";
 import LoginIcon from "@mui/icons-material/Login";
+import { AccountCircle } from "@mui/icons-material";
+import { useHistory } from "react-router-dom";
 
-const Header = () => {
+const Header = (props) => {
+  const history = useHistory();
+
+  const globalState = useGlobalState();
   const _dispatch = React.useContext(globalDispatchContext);
 
-  return (
-    <BottomNavigation
-      showLabels
-      sx={{ backgroundColor: mainColor, color: whiteColor }}
-    >
-      <Typography variant="h5" sx={{ marginTop: "1em", marginLeft: "2em" }}>
-        Django Apartamente App
-      </Typography>
-      <BottomNavigationAction
-        label="Login"
-        value="login"
-        icon={<LoginIcon sx={{ color: whiteColor }} />}
-        onClick={() => {
-          _dispatch({
-            type: Types.Open_Modal,
-            payload: "login",
-          });
-        }}
-      />
-    </BottomNavigation>
+  const [anchorElem, setAnchorElem] = React.useState(null);
 
-    // <div>
-    //   <Button
-    //     variant="contained"
-    //     onClick={() =>
-    //       _dispatch({
-    //         type: Types.Open_Modal,
-    //         payload: "login",
-    //       })
-    //     }
-    //   >
-    //     Login
-    //   </Button>
-    //   <Button
-    //     variant="contained"
-    //     onClick={() =>
-    //       _dispatch({
-    //         type: Types.Open_Modal,
-    //         payload: "register",
-    //       })
-    //     }
-    //   >
-    //     Register
-    //   </Button>
-    // </div>
+  const handleMenu = (event) => {
+    setAnchorElem(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorElem(null);
+  };
+
+  return (
+    <AppBar postion="static">
+      <Toolbar>
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <span onClick={() => history.push("/")}>Django</span>
+        </Typography>
+        {globalState.auth.user === null ? (
+          <>
+            <Button
+              startIcon={<LoginIcon />}
+              sx={{ color: whiteColor }}
+              onClick={() =>
+                _dispatch({
+                  type: Types.Open_Modal,
+                  payload: { type: "login" },
+                })
+              }
+            >
+              Login
+            </Button>
+            <Button
+              sx={{ color: whiteColor }}
+              onClick={() =>
+                _dispatch({
+                  type: Types.Open_Modal,
+                  payload: { type: "register" },
+                })
+              }
+            >
+              Register
+            </Button>
+          </>
+        ) : (
+          <FlexDiv alignItems="center">
+            <Typography>
+              Hello, {globalState.auth.user.first_name}{" "}
+              {globalState.auth.user.last_name}
+            </Typography>
+            <IconButton size="large" onClick={handleMenu}>
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              anchorEl={anchorElem}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              keepMounted
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+              open={Boolean(anchorElem)}
+              onClose={handleClose}
+            >
+              {globalState.auth.user.is_superuser && (
+                <MenuItem>Tipuri Apartament</MenuItem>
+              )}
+              <MenuItem
+                onClick={() => {
+                  history.push("/aplicarile-mele");
+                  handleClose();
+                }}
+              >
+                Aplicarile mele
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  history.push("/apartamentele-mele");
+                  handleClose();
+                }}
+              >
+                Apartamentele mele
+              </MenuItem>
+              <MenuItem
+                onClick={() =>
+                  _dispatch({
+                    type: Types.Set_User,
+                    payload: null,
+                  })
+                }
+              >
+                <ListItemText>Logout</ListItemText>
+              </MenuItem>
+            </Menu>
+          </FlexDiv>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 };
 

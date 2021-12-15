@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import styled from "styled-components";
 
 export const mainColor = "#736CED";
@@ -15,4 +16,17 @@ export const FlexDiv = styled.div`
   margin: ${(props) => props.margin || "0"};
   border: ${(props) => props.border || "unset"};
   border-radius: ${(props) => props.borderRadius || "0"};
+  flex-wrap: ${(props) => props.flexWrap || "nowrap"};
+  min-width: ${(props) => props.minWidth || "unset"};
+  max-width: ${(props) => props.maxWidth || "unset"};
+`;
+
+export const AlignedTypography = styled(Typography)`
+  display: flex;
+  align-items: center;
+`;
+
+export const LeftAlignSpan = styled.span`
+  margin-left: auto;
+  font-wheigth: bold;
 `;

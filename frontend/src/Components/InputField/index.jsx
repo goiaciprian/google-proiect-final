@@ -7,14 +7,16 @@ const InputField = React.forwardRef(
     const { value, onChange, onBlur } = useField(defaultValue);
 
     React.useImperativeHandle(ref, () => ({
-      hasErrors: () => value.error,
+      hasErrors: () => value.error || value.value === "",
       getValue: () => {
-        return { name: value.value };
+        const data = { name: name, value: value.value };
+        return data;
       },
     }));
 
     return (
       <TextField
+        id={name}
         label={label}
         name={name}
         variant="outlined"
@@ -23,7 +25,7 @@ const InputField = React.forwardRef(
         helperText={value.helperMessage}
         onChange={onChange}
         onBlur={onBlur}
-        inputProps={{ type }}
+        inputProps={{ type, autoComplete: "on" }}
       />
     );
   }

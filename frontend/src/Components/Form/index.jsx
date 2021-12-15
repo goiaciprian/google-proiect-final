@@ -5,11 +5,9 @@ import InputField from "../InputField";
 
 const Form = ({ fields, formTitle = null, submitCallback }) => {
   const fieldsRef = React.useRef(fields.map(() => React.createRef()));
-  const [err, setErr] = React.useState(false);
 
   const hasAnyErros = () => {
     const err = fieldsRef.current.some((field) => field.current?.hasErrors());
-    setErr(err);
     return err;
   };
 
@@ -35,10 +33,13 @@ const Form = ({ fields, formTitle = null, submitCallback }) => {
         <InputField
           ref={fieldsRef.current[index]}
           key={index}
-          {...fieldProps}
+          name={fieldProps.name}
+          label={fieldProps.label}
+          type={fieldProps.type}
+          defaultValue={fieldProps.defaultValue}
         />
       ))}
-      <Button variant="outlined" onClick={submitWrapper} disabled={err}>
+      <Button type="submit" variant="contained" onClick={submitWrapper}>
         Submit
       </Button>
     </FlexDiv>

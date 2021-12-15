@@ -19,11 +19,21 @@ const _initial_state = {
     user: null,
     token: null,
   },
-  tip_apartament_list: [],
-  apartamente_list: [],
+  tip_apartament_list: {
+    items: [],
+    loaded: false,
+    error: null,
+  },
+  apartamente_list: {
+    items: [],
+    loaded: false,
+    error: null,
+  },
   modalState: {
     type: "login",
     open: false,
+    message: "",
+    id: null,
   },
   toastAlert: {
     open: false,
@@ -46,7 +56,8 @@ const _reducer = (state, action) => {
     case Types.Set_Apartament_List:
       return { ...state, apartamente_list: action.payload };
     case Types.Set_Tip_Apartament_List:
-      return { ...state, tip_apartamente_list: action.payload };
+      return { ...state, tip_apartament_list: action.payload };
+
     case Types.Set_Auth:
       return { ...state, auth: action.payload };
 
@@ -56,7 +67,7 @@ const _reducer = (state, action) => {
       return { ...state, auth: { ...state.auth, token: action.payload } };
 
     case Types.Open_Modal:
-      return { ...state, modalState: { open: true, type: action.payload } };
+      return { ...state, modalState: { open: true, ...action.payload } };
     case Types.Close_Modal:
       return { ...state, modalState: { ...state.modalState, open: false } };
 
