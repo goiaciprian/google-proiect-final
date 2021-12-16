@@ -1,4 +1,6 @@
-import { Button } from "@mui/material";
+import { DeleteSweepOutlined } from "@mui/icons-material";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { Button, IconButton } from "@mui/material";
 import React from "react";
 import Loader from "../Components/Loader";
 import Message from "../Components/Message";
@@ -6,7 +8,7 @@ import ModalTabel from "../Components/ModalTabel";
 import TableCustom from "../Components/TableCustom";
 import { Types, useGlobalState, useGlobalStateDispatch } from "../Contexts";
 import { FlexDiv } from "../Styles";
-import { get_apartamente_by_user } from "../Utils";
+import { get_apartamente_by_user, apartament_delete } from "../Utils";
 
 const ApartamenteleMele = () => {
   const globalState = useGlobalState();
@@ -24,6 +26,33 @@ const ApartamenteleMele = () => {
       .catch((err) => setloading({ val: false, error: err }));
   }, []);
 
+  const delete_apartament_by_id = (id) => {
+    apartament_delete(id)
+      .then((deleted) => {
+        setApartamente((prevState) => {
+          return [
+            ...prevState.filter((apartament) => apartament.id !== deleted.id),
+          ];
+        });
+        _dispatch({
+          type: Types.Open_Alert,
+          payload: {
+            message: "Apartament sters.",
+            type: "success",
+          },
+        });
+      })
+      .catch((err) => {
+        _dispatch({
+          type: Types.Open_Alert,
+          payload: {
+            message: err.message,
+            type: "error",
+          },
+        });
+      });
+  };
+
   return (
     <>
       {loading.val ? (
@@ -39,6 +68,7 @@ const ApartamenteleMele = () => {
               { label: "Tip apartament", value: "tip_apartament" },
               { label: "Aplicari", value: "aplicari" },
               { label: "Locatari", value: "locatari" },
+              { label: "Actiuni", value: "actiuni" },
             ]}
             data={apartamente.map((apartament) => {
               return {
@@ -79,6 +109,24 @@ const ApartamenteleMele = () => {
                   >
                     Locatari
                   </Button>
+                );
+              },
+              actiuni: (id, value) => {
+                return (
+                  <FlexDiv gap="2em">
+                    <IconButton onClick={() => _dispatch({
+                      type: Types.Open_Modal,
+                      payload: { type: "apartament", id: id },
+                    })} color="primary">
+                      <EditOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => delete_apartament_by_id(id)}
+                      sx={{ color: "red" }}
+                    >
+                      <DeleteSweepOutlined />
+                    </IconButton>
+                  </FlexDiv>
                 );
               },
             }}

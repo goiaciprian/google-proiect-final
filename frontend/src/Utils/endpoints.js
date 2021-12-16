@@ -117,3 +117,44 @@ export const change_status_locatar = async (contract_id, sts) => {
     )
   ).data;
 };
+
+export const merge_tip_apartament = async (data) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.post(`/TipApartamentMerge`, data, {
+      headers: {
+        Authorization: `Bearer ${token === null ? "" : token}`,
+      },
+    })
+  ).data;
+};
+
+export const delete_tip_apartament = async (id) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.post(
+      `/TipApartamentDelete/${id}/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token === null ? "" : token}`,
+        },
+      }
+    )
+  ).data;
+};
+
+export const apartament_delete = async (id) => {
+  const token = await checkOrReturnToken();
+  const response = await await _axios.post(
+    `/ApartamentDelete/${id}/`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token === null ? "" : token}`,
+      },
+    }
+  );
+  console.log(response);
+  return response.data;
+};

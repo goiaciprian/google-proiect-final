@@ -1,10 +1,10 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
-import { FlexDiv } from "../../Styles";
+import { FlexDiv, StyledForm } from "../../Styles";
 import InputField from "../InputField";
 
 const Form = React.forwardRef(
-  ({ fields, formTitle = null, submitCallback }, ref) => {
+  ({ fields, formTitle = null, submitCallback, onBlur }, ref) => {
     const fieldsRef = React.useRef(fields.map(() => React.createRef()));
 
     const hasAnyErros = () => {
@@ -25,8 +25,8 @@ const Form = React.forwardRef(
       valuesArr.forEach((valueObj) => {
         fieldsRef.current.forEach((ref) => {
           ref.current?.setValue((name, setter) => {
-            if (valueObj["name"] === name) {
-              setter(valueObj["value"]);
+            if (valueObj.name === name) {
+              setter(valueObj.value);
             }
           });
         });
@@ -44,21 +44,31 @@ const Form = React.forwardRef(
     }));
 
     return (
-      <FlexDiv flexDirection="column" gap="1em" alignItems="center">
+      <FlexDiv
+        onBlur={onBlur}
+        flexDirection="column"
+        gap="1em"
+        alignItems="center"
+      >
         {formTitle && <Typography variant="h6">{formTitle}</Typography>}
-        {fields.map((fieldProps, index) => (
-          <InputField
-            ref={fieldsRef.current[index]}
-            key={index}
-            name={fieldProps.name}
-            label={fieldProps.label}
-            type={fieldProps.type}
-            defaultValue={fieldProps.defaultValue}
-          />
-        ))}
-        <Button type="submit" variant="contained" onClick={submitWrapper}>
-          Submit
-        </Button>
+        <div></div>
+        <StyledForm>
+          {fields.map((fieldProps, index) => (
+            <InputField
+              ref={fieldsRef.current[index]}
+              key={index}
+              name={fieldProps.name}
+              label={fieldProps.label}
+              type={fieldProps.type}
+              defaultValue={fieldProps.defaultValue}
+              select={fieldProps.select || false}
+              options={fieldProps.options || []}
+            />
+          ))}
+          <Button type="submit" variant="contained" onClick={submitWrapper}>
+            Submit
+          </Button>
+        </StyledForm>
       </FlexDiv>
     );
   }

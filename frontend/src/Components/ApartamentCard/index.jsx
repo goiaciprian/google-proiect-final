@@ -59,8 +59,10 @@ const ApartamentCard = ({ apartament }) => {
             Chirie:<LeftAlignSpan>{apartament.chirie}</LeftAlignSpan>
           </AlignedTypography>
           <AlignedTypography>
-            Metri patrati:
-            <LeftAlignSpan>{apartament.metri_patrati}</LeftAlignSpan>
+            Suprafata:
+            <LeftAlignSpan>
+              {apartament.metri_patrati} m<sup>2</sup>
+            </LeftAlignSpan>
           </AlignedTypography>
         </CardContent>
       </CardActionArea>

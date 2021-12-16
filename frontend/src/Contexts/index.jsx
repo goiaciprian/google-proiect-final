@@ -12,6 +12,7 @@ export const Types = {
   Open_Alert: "OPEN_ALERT",
   Close_Alert: "CLOSE_ALERT",
   Multiple_Changes: "MULTIPLE_CHANGES",
+  Update_Tip_Apartament_Array: "UPDATE_TIP_APARTAMENT_ARRAY",
 };
 
 const _initial_state = {
@@ -57,6 +58,15 @@ const _reducer = (state, action) => {
       return { ...state, apartamente_list: action.payload };
     case Types.Set_Tip_Apartament_List:
       return { ...state, tip_apartament_list: action.payload };
+
+    case Types.Update_Tip_Apartament_Array:
+      return {
+        ...state,
+        tip_apartament_list: {
+          ...state.tip_apartament_list,
+          items: action.payload,
+        },
+      };
 
     case Types.Set_Auth:
       return { ...state, auth: action.payload };

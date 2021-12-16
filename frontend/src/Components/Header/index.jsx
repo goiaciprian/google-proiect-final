@@ -35,7 +35,9 @@ const Header = (props) => {
     <AppBar postion="static">
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <span onClick={() => history.push("/")} style={{cursor: "pointer"}} >Django</span>
+          <span onClick={() => history.push("/")} style={{ cursor: "pointer" }}>
+            Django
+          </span>
         </Typography>
         {globalState.auth.user === null ? (
           <>
@@ -93,6 +95,13 @@ const Header = (props) => {
                   Tipuri Apartament
                 </MenuItem>
               )}
+              <MenuItem onClick={() => {
+                _dispatch({
+                  type: Types.Open_Modal,
+                  payload: { type: "apartament", id: null },
+                })
+                handleClose();
+              }} >Adauga apartament</MenuItem>
               <MenuItem
                 onClick={() => {
                   history.push("/aplicarile-mele");

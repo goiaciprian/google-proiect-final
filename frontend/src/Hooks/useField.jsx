@@ -34,8 +34,6 @@ export default function useField(defauldValue = "") {
   );
 
   const forwardSetState = (value) => {
-    if (value === "") return;
-
     setValue({ type: Types.Set_Value, payload: value });
   };
 

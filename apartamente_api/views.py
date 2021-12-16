@@ -50,7 +50,6 @@ def get_tip_apartament_by_id(request, id):
 @permission_classes([IsAuthenticated])
 def merge_tip_apartament(request):
     created = False
-    nameExists = False
     body = loads(request.body.decode('utf-8'))
     try:
         tip_apartament = TipApartament.objects.get(id=int(body['id']))
@@ -58,17 +57,8 @@ def merge_tip_apartament(request):
     except Exception:
         tip_apartament = TipApartament()
         created = True
-    finally:
-        apartamente = TipApartament.objects.filter(denumire=body['denumire'])
-        if(apartamente.exists()):
-            nameExists = True
-            tip_apartament = apartamente.first()
-
     if(tip_apartament.deleted):
         tip_apartament.deleted = False
-
-    if(nameExists):
-        return Response(TipApartamentSerializer(tip_apartament, many=False).data, status=status.HTTP_302_FOUND)
 
     tip_apartament.denumire = body['denumire']
     tip_apartament.save()

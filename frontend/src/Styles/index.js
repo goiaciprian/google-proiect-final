@@ -30,3 +30,11 @@ export const LeftAlignSpan = styled.span`
   margin-left: auto;
   font-wheigth: bold;
 `;
+
+export const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+`;
