@@ -226,13 +226,18 @@ def accept_deny_aplicatie(request, id, sts):
         aplicatie = AplicantiApartament.objects.filter(
             deleted=False).get(id=id)
         if(sts):
-            if(found := LocuitoriApartament.objects.filter(deleted=False, apartament=aplicatie.apartament, locuitor=aplicatie.aplicant).exists()):
-                return Response(LocuitoriApartamentSerializer(found, many=False).data, status=status.HTTP_302_FOUND)
             aplicatie.status = True
-            locuitor = LocuitoriApartament()
-            locuitor.apartament = aplicatie.apartament
-            locuitor.locuitor = aplicatie.aplicant
-            locuitor.save()
+            if((gasiti := LocuitoriApartament.objects.filter(deleted=False, apartament=aplicatie.apartament, locuitor=aplicatie.aplicant)).exists()):
+                found = gasiti.first()
+                found.locuieste_in_prezent = True if sts == 1 else False
+                found.save()
+                return Response(LocuitoriApartamentSerializer(found, many=False).data, status=status.HTTP_200_OK)
+            else:
+                locuitor = LocuitoriApartament()
+                locuitor.apartament = aplicatie.apartament
+                locuitor.locuitor = aplicatie.aplicant
+                locuitor.locuieste_in_prezent = True
+                locuitor.save()
         else:
             aplicatie.status = False
 

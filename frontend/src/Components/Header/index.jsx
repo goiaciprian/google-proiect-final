@@ -35,7 +35,7 @@ const Header = (props) => {
     <AppBar postion="static">
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          <span onClick={() => history.push("/")}>Django</span>
+          <span onClick={() => history.push("/")} style={{cursor: "pointer"}} >Django</span>
         </Typography>
         {globalState.auth.user === null ? (
           <>
@@ -81,7 +81,17 @@ const Header = (props) => {
               onClose={handleClose}
             >
               {globalState.auth.user.is_superuser && (
-                <MenuItem>Tipuri Apartament</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    _dispatch({
+                      type: Types.Open_Modal,
+                      payload: { type: "tip_apartament" },
+                    });
+                    handleClose();
+                  }}
+                >
+                  Tipuri Apartament
+                </MenuItem>
               )}
               <MenuItem
                 onClick={() => {

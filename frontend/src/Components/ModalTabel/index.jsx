@@ -245,7 +245,7 @@ const ModalTabel = () => {
       .catch((err) => {
         _dispatch({
           type: Types.Open_Alert,
-          payload: { message: err, type: "error" },
+          payload: { message: err.message, type: "error" },
         });
       });
   };
@@ -285,7 +285,6 @@ const ModalTabel = () => {
     >
       <DialogTitle>Aplicanti</DialogTitle>
       <DialogContent>
-        {console.log(tabelState.data)}
         {tabelState.data.loading ? (
           <Loader />
         ) : tabelState.data.err ? (

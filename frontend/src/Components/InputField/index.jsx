@@ -4,10 +4,15 @@ import useField from "../../Hooks/useField";
 
 const InputField = React.forwardRef(
   ({ type, defaultValue, label, name }, ref) => {
-    const { value, onChange, onBlur } = useField(defaultValue);
+    const { value, onChange, onBlur, setState } = useField(defaultValue);
 
     React.useImperativeHandle(ref, () => ({
       hasErrors: () => value.error || value.value === "",
+      setValue: (getName) => {
+        getName(name, (value) =>
+          setState({ type: "SET_VALUE", payload: value })
+        );
+      },
       getValue: () => {
         const data = { name: name, value: value.value };
         return data;

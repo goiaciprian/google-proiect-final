@@ -33,6 +33,12 @@ export default function useField(defauldValue = "") {
     () => initialState
   );
 
+  const forwardSetState = (value) => {
+    if (value === "") return;
+
+    setValue({ type: Types.Set_Value, payload: value });
+  };
+
   React.useLayoutEffect(() => {
     setValue({ type: Types.Set_Value, payload: defauldValue });
   }, [defauldValue]);
@@ -52,5 +58,5 @@ export default function useField(defauldValue = "") {
         payload: { error: false, helperMessage: "" },
       });
   };
-  return { value, onChange, onBlur };
+  return { value, onChange, onBlur, setState: forwardSetState };
 }

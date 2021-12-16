@@ -21,6 +21,7 @@ import Header from "./Components/Header";
 import ModalConfirma from "./Components/ModalConfirma";
 import AplicarileMele from "./Pages/AplicarileMele";
 import ApartamenteleMele from "./Pages/ApartamenteleMele";
+import ModalTipApartament from "./Components/ModalTipApartament";
 
 function App() {
   const globalState = useGlobalState();
@@ -88,6 +89,7 @@ function App() {
         </div>
         <AuthModal />
         <ModalConfirma />
+        <ModalTipApartament />
       </BrowserRouter>
     </div>
   );
