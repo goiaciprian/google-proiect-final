@@ -1,4 +1,5 @@
 
+from warnings import catch_warnings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -97,7 +98,7 @@ def get_apartamente_list(request):
     indexFinal = int(elementePePagina) * int(pagina)
     indexStart = indexFinal - int(elementePePagina)
 
-    apartamente = list(Apartament.objects.filter(deleted=False))[
+    apartamente = list(Apartament.objects.filter(deleted=False).order_by("created_at"))[
         indexStart:indexFinal]
     return Response(ApartamentSerializer(apartamente, many=True).data, status=status.HTTP_200_OK)
 
@@ -171,6 +172,18 @@ def delete_apartament(request, id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+def get_apartament_aplicari_by_user(request, user_id):
+    try:
+        aplicari = AplicantiApartament.objects.filter(
+            aplicant_id=user_id, deleted=False)
+        return Response(AplicantiApartamentSerializer(aplicari, many=True).data)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_apartament_aplicari(request, apartament_id):
     try:
         aplicatie = AplicantiApartament.objects.filter(
@@ -202,6 +215,7 @@ def adauga_aplicare_apartament(request):
         return Response(AplicantiApartamentSerializer(apartament, many=False).data, status=status.HTTP_200_OK)
 
     except Exception as e:
+        print(e)
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -212,11 +226,15 @@ def accept_deny_aplicatie(request, id, sts):
         aplicatie = AplicantiApartament.objects.filter(
             deleted=False).get(id=id)
         if(sts):
-            aplicatie.status = True if sts == 1 else False
+            if(found := LocuitoriApartament.objects.filter(deleted=False, apartament=aplicatie.apartament, locuitor=aplicatie.aplicant).exists()):
+                return Response(LocuitoriApartamentSerializer(found, many=False).data, status=status.HTTP_302_FOUND)
+            aplicatie.status = True
             locuitor = LocuitoriApartament()
             locuitor.apartament = aplicatie.apartament
             locuitor.locuitor = aplicatie.aplicant
             locuitor.save()
+        else:
+            aplicatie.status = False
 
         aplicatie.save()
 
@@ -232,6 +250,23 @@ def get_locuitori_apartament(request, apartament_id):
         locuitori = LocuitoriApartament.objects.filter(
             deleted=False).filter(apartament_id=apartament_id)
         return Response(LocuitoriApartamentSerializer(locuitori, many=True).data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_status_locatar(request, id, sts):
+    try:
+        locatar = LocuitoriApartament.objects.filter(deleted=False, id=id)
+        if(locatar.exists()):
+            locatar = locatar.first()
+            locatar.locuieste_in_prezent = True if sts == 1 else False
+            locatar.save()
+            return Response(LocuitoriApartamentSerializer(locatar, many=False).data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         print(e)
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -258,3 +293,13 @@ def register_user(request):
         return Response({'token': token, 'user': UserSerializer(user).data}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_user_by_id(request, id):
+    try:
+        user = User.objects.get(id=id)
+        return Response(UserSerializer(user, many=False).data, status=status.HTTP_200_OK)
+    except User.DoesNotExist:
+        raise Http404

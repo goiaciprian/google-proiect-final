@@ -60,7 +60,14 @@ const AuthModal = () => {
   };
 
   return (
-    <Dialog open={globalState.modalState.open} onClose={handleClose}>
+    <Dialog
+      open={
+        globalState.modalState.open &&
+        (globalState.modalState.type === "login" ||
+          globalState.modalState.type === "register")
+      }
+      onClose={handleClose}
+    >
       <DialogTitle sx={{ marginLeft: "auto" }}>
         <IconButton onClick={handleClose}>
           <CloseIcon />

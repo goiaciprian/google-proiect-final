@@ -23,6 +23,8 @@ urlpatterns = [
     path('ApartamentMerge', merge_apartament, name='merge-apartament'),
     path('ApartamentDelete/<int:id>/',
          delete_apartament, name='delete-apartament'),
+    path('ApartamentAplicariListByUser/<int:user_id>/',
+         get_apartament_aplicari_by_user, name='get-apartamente-aplicari-by-user-id'),
     path('ApartamentAplicariListByApartament/<int:apartament_id>/',
          get_apartament_aplicari, name='get-apartament-aplicari'),
     path("ApartamentAplica", adauga_aplicare_apartament,
@@ -31,4 +33,7 @@ urlpatterns = [
          accept_deny_aplicatie, name="accept-deny-aplicatie"),
     path("ApartamentLocuitoriListByApartament/<int:apartament_id>/",
          get_locuitori_apartament, name="get-locuitori-apartament"),
+    path("ApartamentLocatarChangeStatus/<int:id>/<int:sts>/",
+         change_status_locatar, name="change-status-locatar"),
+    path("UserById/<int:id>/", get_user_by_id, name="get-user-by-id"),
 ]

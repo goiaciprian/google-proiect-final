@@ -52,3 +52,68 @@ export const get_aplicari_by_user = async (user_id) => {
     })
   ).data;
 };
+
+export const get_apartamente_by_user = async (user_id) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.get(`/ApartamenteByOwnerId/${user_id}/`, {
+      headers: {
+        Authorization: `Bearer ${token === null ? "" : token}`,
+      },
+    })
+  ).data;
+};
+
+export const get_aplicari_by_apartament = async (apartament_id) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.get(`/ApartamentAplicariListByApartament/${apartament_id}/`, {
+      headers: {
+        Authorization: `Bearer ${token === null ? "" : token}`,
+      },
+    })
+  ).data;
+};
+
+export const get_locatari_by_apartament = async (apartament_id) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.get(`/ApartamentLocuitoriListByApartament/${apartament_id}/`, {
+      headers: {
+        Authorization: `Bearer ${token === null ? "" : token}`,
+      },
+    })
+  ).data;
+};
+
+export const update_status_aplicare = async (aplicare_id, status) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.post(
+      `/ApartamentUpdateAplicare/${aplicare_id}/${status ? 1 : 0}/`,
+      {
+        status,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token === null ? "" : token}`,
+        },
+      }
+    )
+  ).data;
+};
+
+export const change_status_locatar = async (contract_id, sts) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.post(
+      `/ApartamentLocatarChangeStatus/${contract_id}/${sts}/`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token === null ? "" : token}`,
+        },
+      }
+    )
+  ).data;
+};

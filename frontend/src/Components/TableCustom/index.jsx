@@ -39,7 +39,7 @@ const TableCustom = React.forwardRef(({ headers, data, renderColumn }, ref) => {
     resetPage: () => updatePage(0),
   }));
 
-  React.useEffect(() => setCompleteSet(data), [data]);
+  React.useEffect(() => setCompleteSet(data), [data, headers, renderColumn]);
 
   return (
     <TableContainer>
@@ -69,7 +69,10 @@ const TableCustom = React.forwardRef(({ headers, data, renderColumn }, ref) => {
                       <TableCell key={index}>
                         {renderColumn !== undefined &&
                         Object.keys(renderColumn).includes(header.value)
-                          ? renderColumn[header.value](elem[header.value])
+                          ? renderColumn[header.value](
+                              elem.id,
+                              elem[header.value]
+                            )
                           : elem[header.value]}
                       </TableCell>
                     );
