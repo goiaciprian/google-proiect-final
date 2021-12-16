@@ -13,6 +13,7 @@ export const Types = {
   Close_Alert: "CLOSE_ALERT",
   Multiple_Changes: "MULTIPLE_CHANGES",
   Update_Tip_Apartament_Array: "UPDATE_TIP_APARTAMENT_ARRAY",
+  Update_Apartamente_Array: "UPDATE_APARTAMENTE_ARRAY",
 };
 
 const _initial_state = {
@@ -68,6 +69,15 @@ const _reducer = (state, action) => {
         },
       };
 
+    case Types.Update_Apartamente_Array:
+      return {
+        ...state,
+        apartamente_list: {
+          ...state.apartamente_list,
+          items: action.payload,
+        },
+      };
+
     case Types.Set_Auth:
       return { ...state, auth: action.payload };
 
@@ -115,7 +125,7 @@ const withGlobalState = (Component) => (props) => {
 
   return (
     <globalStateContext.Provider value={_state}>
-      <globalDispatchContext.Provider value={dispatch}>
+      <globalDispatchContext.Provider value={_dispatch}>
         <Component {...props} />
         <Toast />
       </globalDispatchContext.Provider>

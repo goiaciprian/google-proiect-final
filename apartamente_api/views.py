@@ -1,5 +1,4 @@
 
-from warnings import catch_warnings
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import Http404
 from django.contrib.auth.models import User
 from json import loads
+from pprint import pprint
 
 from apartamente_api.utils import create_token
 
@@ -113,38 +113,36 @@ def get_apartamente_by_owner_id(request, id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def merge_apartament(request):
-    created = False
-    nameExists = False
-    body = loads(request.body.decode('utf-8'))
+def merge_apartament_new(request):
     try:
-        apartament = Apartament.objects.get(id=int(body['id']))
+        created = False
+        body = loads(request.body.decode('utf-8'))
+        try:
+            apartament = Apartament.objects.get(id=int(body['id']))
 
-    except Exception:
-        apartament = Apartament()
-        created = True
-    finally:
-        apartamente = Apartament.objects.filter(denumire=body['denumire'])
-        if(apartamente.exists()):
-            nameExists = True
-            apartament = apartamente.first()
+        except Exception:
+            apartament = Apartament()
+            created = True
 
-    if(apartament.deleted):
-        apartament.deleted = False
+        if(apartament.deleted):
+            apartament.deleted = False
 
-    if(nameExists):
-        return Response(ApartamentSerializer(apartament, many=False).data, status=status.HTTP_302_FOUND)
+        apartament.denumire = body['denumire']
+        apartament.adresa = body['adresa']
+        apartament.chirie = int(body['chirie'])
+        apartament.metri_patrati = int(body['metri_patrati'])
+        apartament.tip = TipApartament.objects.get(
+            id=int(body['tip_apartament']))
+        apartament.owner = User.objects.get(id=int(body['owner']))
 
-    apartament.denumire = body['denumire']
-    apartament.adresa = body['adresa']
-    apartament.chirie = int(body['chirie'])
-    apartament.metri_patrati = int(body['metri_patrati'])
-    apartament.tip = TipApartament.objects.get(id=int(body['tip_apartament']))
-    apartament.owner = User.objects.get(id=int(body['owner']))
+        pprint(apartament)
 
-    apartament.save()
+        apartament.save()
 
-    return Response(ApartamentSerializer(apartament, many=False).data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+        return Response(ApartamentSerializer(apartament, many=False).data, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERRORT)
 
 
 @api_view(['POST'])

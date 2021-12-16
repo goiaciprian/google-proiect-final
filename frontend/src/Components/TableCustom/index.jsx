@@ -43,7 +43,10 @@ const TableCustom = React.forwardRef(
       resetPage: () => updatePage(0),
     }));
 
-    React.useEffect(() => setCompleteSet(data), [data, headers, renderColumn]);
+    React.useEffect(() => {
+      updatePage(0);
+      setCompleteSet(data);
+    }, [data, headers, renderColumn]);
 
     return (
       <TableContainer>
@@ -67,7 +70,10 @@ const TableCustom = React.forwardRef(
               )
               .map((elem, index) => {
                 return (
-                  <TableRow key={index} onClick={onClick ? () => onClick(elem) : undefined}>
+                  <TableRow
+                    key={index}
+                    onClick={onClick ? () => onClick(elem) : undefined}
+                  >
                     {headers.map((header, index) => {
                       return (
                         <TableCell key={index}>

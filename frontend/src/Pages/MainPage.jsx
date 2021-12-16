@@ -1,18 +1,29 @@
 import ApartamentCard from "../Components/ApartamentCard";
 import Loader from "../Components/Loader";
-import { useGlobalState } from "../Contexts";
+import { globalStateContext } from "../Contexts";
 import { FlexDiv } from "../Styles";
+import React from "react";
 
 export default function MainPage() {
-  const globalState = useGlobalState();
+  const globalState = React.useContext(globalStateContext);
+
+  const [apartamente, setApartamete] = React.useState({
+    items: [],
+    loaded: false,
+    error: null,
+  });
+
+  React.useEffect(() => {
+    setApartamete(globalState.apartamente_list);
+  }, [globalState]);
 
   return (
     <>
       <FlexDiv gap="2em" flexWrap="wrap" maxWidth="1400px" margin="0 auto">
-        {!globalState.apartamente_list.loaded ? (
+        {!apartamente.loaded ? (
           <Loader />
         ) : (
-          globalState.apartamente_list.items.map((apartament, index) => {
+          apartamente.items.map((apartament, index) => {
             return <ApartamentCard apartament={apartament} key={index} />;
           })
         )}

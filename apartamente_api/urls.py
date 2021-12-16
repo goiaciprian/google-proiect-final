@@ -20,7 +20,7 @@ urlpatterns = [
          name='get-apartament-by-id'),
     path('ApartamenteByOwnerId/<int:id>/', get_apartamente_by_owner_id,
          name='get-apartamente-by-owner-id'),
-    path('ApartamentMerge', merge_apartament, name='merge-apartament'),
+    path('ApartamentMerge/', merge_apartament_new, name='merge-apartament'),
     path('ApartamentDelete/<int:id>/',
          delete_apartament, name='delete-apartament'),
     path('ApartamentAplicariListByUser/<int:user_id>/',

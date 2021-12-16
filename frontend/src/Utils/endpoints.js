@@ -158,3 +158,14 @@ export const apartament_delete = async (id) => {
   console.log(response);
   return response.data;
 };
+
+export const apartament_merge = async (data) => {
+  const token = await checkOrReturnToken();
+  return (
+    await _axios.post(`/ApartamentMerge/`, data, {
+      headers: {
+        Authorization: `Bearer ${token === null ? "" : token}`,
+      },
+    })
+  ).data;
+};

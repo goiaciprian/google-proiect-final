@@ -26,6 +26,15 @@ const ApartamenteleMele = () => {
       .catch((err) => setloading({ val: false, error: err }));
   }, []);
 
+  React.useEffect(() => {
+    get_apartamente_by_user(globalState.auth.user.user_id)
+      .then((response) => {
+        setApartamente(response);
+        setloading({ val: false, error: null });
+      })
+      .catch((err) => setloading({ val: false, error: err }));
+  }, [globalState.apartamente_list]);
+
   const delete_apartament_by_id = (id) => {
     apartament_delete(id)
       .then((deleted) => {
@@ -114,10 +123,15 @@ const ApartamenteleMele = () => {
               actiuni: (id, value) => {
                 return (
                   <FlexDiv gap="2em">
-                    <IconButton onClick={() => _dispatch({
-                      type: Types.Open_Modal,
-                      payload: { type: "apartament", id: id },
-                    })} color="primary">
+                    <IconButton
+                      onClick={() =>
+                        _dispatch({
+                          type: Types.Open_Modal,
+                          payload: { type: "apartament", id: id },
+                        })
+                      }
+                      color="primary"
+                    >
                       <EditOutlinedIcon />
                     </IconButton>
                     <IconButton

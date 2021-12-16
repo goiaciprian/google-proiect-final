@@ -227,6 +227,10 @@ const ModalTabel = () => {
     };
   }, [globalState.modalState]);
 
+  React.useEffect(() => {
+    if (!globalState.modalState.open) reset();
+  }, [globalState.modalState.open]);
+
   const changeStatus = (id, status) => {
     update_status_aplicare(id, status)
       .then((respose) => {
